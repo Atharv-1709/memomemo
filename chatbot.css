@@ -217,6 +217,23 @@
     border-bottom-right-radius: 6px;
 }
 
+.ai-listen-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .38rem;
+    min-height: 36px;
+    margin: .65rem 0 -.25rem;
+    padding: .35rem .65rem;
+    border: 1px solid rgba(124, 58, 237, .24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .58);
+    color: #4c1d95;
+    font: inherit;
+    font-size: .86rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 .ai-typing {
     display: flex;
     gap: 4px;

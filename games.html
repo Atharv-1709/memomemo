@@ -185,6 +185,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link href="app-mobile.css" rel="stylesheet">
     <link href="chatbot.css" rel="stylesheet">
+    <link href="theme-liquid-glass.css" rel="stylesheet">
 
 </head>
 <body>
@@ -250,10 +251,11 @@
     
     <script>
         function emergencyAlert() { 
-            alert('EMERGENCY! Help is on the way!'); 
+            memocareToast('Emergency! Help is on the way!', 'error'); 
             if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]); 
         }
     </script>
+    <script src="app-enhancements.js"></script>
     <script src="chatbot.js"></script>
 </body>
 </html>

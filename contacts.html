@@ -414,6 +414,15 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
+.contact-actions .call-family-btn {
+  width: auto;
+  min-width: 48px;
+  padding: 0 0.8rem;
+  gap: 0.4rem;
+  color: #0f6b4b;
+  font-weight: 800;
+}
+
 /* Empty State */
 .family-empty {
   text-align: center;
@@ -696,9 +705,10 @@ textarea {
     <link rel="manifest" href="manifest.webmanifest">
     <link href="app-mobile.css" rel="stylesheet">
     <link href="chatbot.css" rel="stylesheet">
+    <link href="theme-liquid-glass.css" rel="stylesheet">
 
 </head>
-<body>
+<body class="mc-family-page">
     <div class="animated-bg"><div class="fidgets"></div></div>
     
 <div class="header">
@@ -887,6 +897,7 @@ function renderFamily() {
           </div>
         </div>
         <div class="contact-actions">
+          ${member.phone ? `<button class="call-family-btn" type="button" onclick="window.callFamilyMember(${idx})" aria-label="Call ${escapeHtml(member.name)}"><i class="fas fa-phone-alt" aria-hidden="true"></i><span>call</span></button>` : ''}
           ${member.voice ? `<button onclick="window.playVoice(${idx})"><i class="fas fa-volume-up"></i></button>` : `<button disabled style="opacity:0.4;"><i class="fas fa-microphone-slash"></i></button>`}
           <button onclick="window.deleteContact(${idx})"><i class="fas fa-trash-alt"></i></button>
         </div>
@@ -896,12 +907,28 @@ function renderFamily() {
   container.innerHTML = html;
 }
 
+window.callFamilyMember = function(idx) {
+  const member = family[idx];
+  if (!member?.phone) {
+    memocareToast('This family member does not have a phone number yet.', 'info');
+    return;
+  }
+  // Keep only characters permitted in a telephone URI, then let the device dialer
+  // ask the user to confirm the call.
+  const number = String(member.phone).trim().replace(/[^0-9+*#,;]/g, '');
+  if (!number) {
+    memocareToast('This phone number is not valid.', 'error');
+    return;
+  }
+  window.location.href = `tel:${number}`;
+};
+
 window.playVoice = function(idx) {
   const voice = family[idx]?.voice;
   if (voice) {
-    new Audio(voice).play().catch(e => alert('Could not play audio'));
+    new Audio(voice).play().catch(e => memocareToast('Could not play the voice recording.', 'error'));
   } else {
-    alert('No voice recording');
+    memocareToast('There is no voice recording yet.', 'info');
   }
 };
 
@@ -1214,6 +1241,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         document.documentElement.setAttribute('data-theme', savedTheme);
     })();
 </script>
+<script src="app-enhancements.js"></script>
 <script src="chatbot.js"></script>
 </body>
 </html>

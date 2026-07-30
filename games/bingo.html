@@ -115,6 +115,7 @@
     <link href="game-theme.css" rel="stylesheet">
     <link rel="manifest" href="../manifest.webmanifest">
     <link href="../app-mobile.css" rel="stylesheet">
+    <link href="../theme-liquid-glass.css" rel="stylesheet">
 </head>
 <body>
     <div class="header"><div class="logo"><i class="fas fa-heartbeat"></i> MEMOCARE</div><div><i class="fas fa-dice"></i> Bingo - Play with Bot</div></div>
@@ -146,7 +147,7 @@
     </div>
     
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><span class="nav-icon"><i class="fas fa-brain"></i></span><span>Games</span></a>
+        <a href="indexgames.html" class="nav-item"><span class="nav-icon"><i class="fas fa-brain"></i></span><span>Games</span></a>
         <a href="memory-cards.html" class="nav-item"><span class="nav-icon"><i class="fas fa-gem"></i></span><span>Memory Cards</span></a>
         <a href="jigsaw.html" class="nav-item"><span class="nav-icon"><i class="fas fa-puzzle-piece"></i></span><span>Jigsaw Puzzle</span></a>
         <a href="wordsearch.html" class="nav-item"><span class="nav-icon"><i class="fas fa-search"></i></span><span>Word Search</span></a>
@@ -469,7 +470,7 @@
         document.getElementById('callBtn').onclick = callNextNumber;
         document.getElementById('resetBtn').onclick = resetGame;
         document.getElementById('emergencyBtn').onclick = () => {
-            alert('Emergency!');
+            memocareToast('Emergency! Help is on the way!', 'error');
             if(navigator.vibrate) navigator.vibrate(500);
         };
         
@@ -486,6 +487,7 @@
         
         initGame();
     </script>
+    <script src="../app-enhancements.js"></script>
 </body>
 </html>
 

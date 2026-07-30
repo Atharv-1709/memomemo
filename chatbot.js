@@ -8,6 +8,45 @@
         "Always be encouraging, calm, and loving. Address the user warmly. Never use complex medical jargon. " +
         "If they ask who you are, say: 'I am Remembrance AI, your gentle memory helper in MEMOCARE. I am always here for you.'";
 
+    // Choose the most natural English voice exposed by the person's device. Voice
+    // availability is OS/browser dependent, so this always retains a safe fallback.
+    let availableVoices = [];
+    const preferredVoiceNames = [
+        /samantha/i, /karen/i, /ava/i, /allison/i, /susan/i, /zira/i,
+        /aria/i, /jenny/i, /guy/i, /davis/i, /google.*(us|uk).*english/i,
+        /microsoft.*natural/i, /premium/i, /enhanced/i
+    ];
+    function loadVoices() { availableVoices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+    function selectVoice() {
+        const language = window.memocareVoiceLanguage || localStorage.getItem('memocare_language') || 'en';
+        const matching = availableVoices.filter(voice => voice.lang.toLowerCase().startsWith(language.toLowerCase()));
+        const candidates = matching.length ? matching : availableVoices.filter(voice => /^en([-_]|$)/i.test(voice.lang));
+        return preferredVoiceNames.map(pattern => candidates.find(voice => pattern.test(voice.name))).find(Boolean)
+            || candidates.find(voice => /natural|neural|premium|enhanced/i.test(voice.name))
+            || candidates[0] || availableVoices[0];
+    }
+    function speakNaturally(text) {
+        if (!('speechSynthesis' in window) || !text) return;
+        speechSynthesis.cancel();
+        // Emoji names sound jarring in text-to-speech; speak only the human words.
+        const spokenText = String(text).replace(/[\p{Extended_Pictographic}]/gu, '').replace(/\s+/g, ' ').trim();
+        const chunks = spokenText.match(/[^.!?]+[.!?]*|[^.!?]+$/g) || [spokenText];
+        let index = 0;
+        const sayNext = () => {
+            if (index >= chunks.length) return;
+            const utterance = new SpeechSynthesisUtterance(chunks[index++].trim());
+            utterance.voice = selectVoice();
+            const punctuation = chunks[index - 1].slice(-1);
+            // Tiny natural variations make the same selected system voice less mechanical.
+            utterance.rate = punctuation === '?' ? 0.81 : punctuation === '!' ? 0.84 : 0.8;
+            utterance.pitch = punctuation === '?' ? 1.06 : punctuation === '!' ? 1.04 : 1.02;
+            utterance.volume = punctuation === '!' ? 0.98 : 0.92;
+            utterance.onend = () => setTimeout(sayNext, punctuation === ',' ? 120 : punctuation ? 220 : 160);
+            speechSynthesis.speak(utterance);
+        };
+        sayNext();
+    }
+
     function injectHTML() {
         // FAB button
         const fab = document.createElement('button');
@@ -73,6 +112,15 @@
         const msg = document.createElement('div');
         msg.className = `ai-msg ${role}`;
         msg.textContent = text;
+        if (role === 'bot') {
+            const listen = document.createElement('button');
+            listen.type = 'button';
+            listen.className = 'ai-listen-btn';
+            listen.setAttribute('aria-label', 'Listen to this message');
+            listen.innerHTML = '<i class="fas fa-volume-high" aria-hidden="true"></i> Listen';
+            listen.addEventListener('click', () => speakNaturally(text));
+            msg.appendChild(listen);
+        }
         container.appendChild(msg);
         container.scrollTop = container.scrollHeight;
         return msg;
@@ -209,7 +257,10 @@
             document.head.appendChild(script);
         }
         injectHTML();
+        loadVoices();
+        if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
         setupEvents();
+        window.memocareSpeak = speakNaturally;
         window.openSosOverlay = openSosOverlay;
         window.closeSosOverlay = closeSosOverlay;
         window.emergencyAlert = openSosOverlay;
