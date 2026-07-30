@@ -506,7 +506,7 @@
             audioToggleBtn.querySelector('span').textContent = 'Stop Alert';
             audioToggleBtn.classList.remove('paused');
             if (safetyStatusDiv.innerText.includes('ALERT')) {
-                speakLoop('Warning! You have left the safety zone. Please return home immediately.', 'à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€! à¤†à¤ª à¤¸à¥à¤°à¤•à¥à¤·à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¸à¥‡ à¤¬à¤¾à¤¹à¤° à¤¹à¥ˆà¤‚à¥¤ à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¤à¥à¤°à¤‚à¤¤ à¤˜à¤° à¤²à¥Œà¤Ÿà¥‡à¤‚à¥¤');
+                speakLoop('Warning! You have left the safety zone. Please return home immediately.', 'चेतावनी! आप सुरक्षित क्षेत्र से बाहर निकल गए हैं। कृपया तुरंत घर लौट आएं।');
             }
         }
 
@@ -566,10 +566,10 @@
                     window.alertTriggered = true;
                     showNotif('You left the safety zone!', true);
                     if (!audioPaused) {
-                        speakLoop('Warning! You have left the safety zone. Please return home immediately.', 'à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€! à¤†à¤ª à¤¸à¥à¤°à¤•à¥à¤·à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¸à¥‡ à¤¬à¤¾à¤¹à¤° à¤¹à¥ˆà¤‚à¥¤ à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¤à¥à¤°à¤‚à¤¤ à¤˜à¤° à¤²à¥Œà¤Ÿà¥‡à¤‚à¥¤');
+                        speakLoop('Warning! You have left the safety zone. Please return home immediately.', 'चेतावनी! आप सुरक्षित क्षेत्र से बाहर निकल गए हैं। कृपया तुरंत घर लौट आएं।');
                     } else {
                         speak('Warning! You have left the safety zone.', 'en-US');
-                        setTimeout(() => speak('à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€! à¤†à¤ª à¤¸à¥à¤°à¤•à¥à¤·à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¸à¥‡ à¤¬à¤¾à¤¹à¤° à¤¹à¥ˆà¤‚à¥¤', 'hi-IN'), 1500);
+                        setTimeout(() => speak('चेतावनी! आप सुरक्षित क्षेत्र से बाहर निकल गए हैं। कृपया तुरंत घर लौट आएं।', 'hi-IN'), 1500);
                     }
                 }
             } else {
